@@ -28,6 +28,9 @@ class OTPTextField extends StatefulWidget {
   /// show the error border or not
   final bool hasError;
 
+  /// OTP error text.
+  final String? errorText;
+
   final TextCapitalization textCapitalization;
 
   /// The style to use for the text being edited.
@@ -71,17 +74,17 @@ class OTPTextField extends StatefulWidget {
     this.spaceBetween = 0,
     this.otpFieldStyle,
     this.hasError = false,
+    this.errorText = '',
     this.keyboardType = TextInputType.number,
     this.style = const TextStyle(),
-    this.outlineBorderRadius= 10,
+    this.outlineBorderRadius = 10,
     this.textCapitalization = TextCapitalization.none,
     this.textFieldAlignment = MainAxisAlignment.spaceBetween,
     this.obscureText = false,
     this.fieldStyle = FieldStyle.underline,
     this.onChanged,
     this.inputFormatter,
-    this.contentPadding =
-        const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+    this.contentPadding = const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
     this.isDense = false,
     this.onCompleted,
   })  : assert(length > 1),
@@ -113,8 +116,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
     }
 
     _focusNodes = List<FocusNode?>.filled(widget.length, null, growable: false);
-    _textControllers = List<TextEditingController?>.filled(widget.length, null,
-        growable: false);
+    _textControllers = List<TextEditingController?>.filled(widget.length, null, growable: false);
 
     _pin = List.generate(widget.length, (int i) {
       return '';
@@ -131,12 +133,26 @@ class _OTPTextFieldState extends State<OTPTextField> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.width,
-      child: Row(
-        mainAxisAlignment: widget.textFieldAlignment,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: List.generate(widget.length, (index) {
-          return buildTextField(context, index);
-        }),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: widget.textFieldAlignment,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: List.generate(widget.length, (index) {
+              return buildTextField(context, index);
+            }),
+          ),
+          Visibility(
+            visible: widget.hasError,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: Text(
+                widget.errorText ?? '',
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.red),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -163,8 +179,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
     final isLast = index == widget.length - 1;
 
     InputBorder _getBorder(Color color) {
-      final colorOrError =
-          widget.hasError ? _otpFieldStyle.errorBorderColor : color;
+      final colorOrError = widget.hasError ? _otpFieldStyle.errorBorderColor : color;
 
       return widget.fieldStyle == FieldStyle.box
           ? OutlineInputBorder(
@@ -174,7 +189,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
           : UnderlineInputBorder(borderSide: BorderSide(color: colorOrError));
     }
 
-    Color _getFillColor(){
+    Color _getFillColor() {
       return widget.hasError ? _otpFieldStyle.errorBackgroundColor : _otpFieldStyle.backgroundColor;
     }
 
@@ -239,9 +254,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
 
           // if there are no null values that means otp is completed
           // Call the `onCompleted` callback function provided
-          if (!_pin.contains(null) &&
-              !_pin.contains('') &&
-              currentPin.length == widget.length) {
+          if (!_pin.contains(null) && !_pin.contains('') && currentPin.length == widget.length) {
             widget.onCompleted?.call(currentPin);
           }
 
@@ -259,8 +272,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
     if (focusNode == null || controller == null) return;
 
     if (focusNode.hasFocus) {
-      controller.selection = TextSelection.fromPosition(
-          TextPosition(offset: controller.text.length));
+      controller.selection = TextSelection.fromPosition(TextPosition(offset: controller.text.length));
     }
   }
 
@@ -289,9 +301,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
 
     // if there are no null values that means otp is completed
     // Call the `onCompleted` callback function provided
-    if (!_pin.contains(null) &&
-        !_pin.contains('') &&
-        currentPin.length == widget.length) {
+    if (!_pin.contains(null) && !_pin.contains('') && currentPin.length == widget.length) {
       widget.onCompleted?.call(currentPin);
     }
 
@@ -329,8 +339,7 @@ class OtpFieldController {
   void set(List<String> pin) {
     final textFieldLength = _otpTextFieldState.widget.length;
     if (pin.length < textFieldLength) {
-      throw Exception(
-          "Pin length must be same as field length. Expected: $textFieldLength, Found ${pin.length}");
+      throw Exception("Pin length must be same as field length. Expected: $textFieldLength, Found ${pin.length}");
     }
 
     _otpTextFieldState._pin = pin;
@@ -357,8 +366,7 @@ class OtpFieldController {
   void setValue(String value, int position) {
     final maxIndex = _otpTextFieldState.widget.length - 1;
     if (position > maxIndex) {
-      throw Exception(
-          "Provided position is out of bounds for the OtpTextField");
+      throw Exception("Provided position is out of bounds for the OtpTextField");
     }
 
     final textControllers = _otpTextFieldState._textControllers;
@@ -384,8 +392,7 @@ class OtpFieldController {
   void setFocus(int position) {
     final maxIndex = _otpTextFieldState.widget.length - 1;
     if (position > maxIndex) {
-      throw Exception(
-          "Provided position is out of bounds for the OtpTextField");
+      throw Exception("Provided position is out of bounds for the OtpTextField");
     }
 
     final focusNodes = _otpTextFieldState._focusNodes;
