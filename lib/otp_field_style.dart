@@ -4,6 +4,9 @@ class OtpFieldStyle {
   /// The background color for outlined box.
   final Color backgroundColor;
 
+  /// The error background color for outlined.
+  final Color errorBackgroundColor;
+
   /// The border color text field.
   final Color borderColor;
 
@@ -19,11 +22,11 @@ class OtpFieldStyle {
   /// The border color of text field when disabled.
   final Color errorBorderColor;
 
-  OtpFieldStyle(
-      {this.backgroundColor: Colors.transparent,
-      this.borderColor: Colors.black26,
-      this.focusBorderColor: Colors.blue,
-      this.disabledBorderColor: Colors.grey,
-      this.enabledBorderColor: Colors.black26,
-      this.errorBorderColor: Colors.red});
+  OtpFieldStyle({this.backgroundColor = Colors.transparent,
+  this.errorBackgroundColor = Colors.transparent,
+      this.borderColor = Colors.black26,
+      this.focusBorderColor = Colors.blue,
+      this.disabledBorderColor = Colors.grey,
+      this.enabledBorderColor = Colors.black26,
+      this.errorBorderColor = Colors.red,});
 }

@@ -73,7 +73,7 @@ class OTPTextField extends StatefulWidget {
     this.hasError = false,
     this.keyboardType = TextInputType.number,
     this.style = const TextStyle(),
-    this.outlineBorderRadius: 10,
+    this.outlineBorderRadius= 10,
     this.textCapitalization = TextCapitalization.none,
     this.textFieldAlignment = MainAxisAlignment.spaceBetween,
     this.obscureText = false,
@@ -174,8 +174,8 @@ class _OTPTextFieldState extends State<OTPTextField> {
           : UnderlineInputBorder(borderSide: BorderSide(color: colorOrError));
     }
 
-    Color _getFillColor(Color color){
-      return widget.hasError ? Colors.red.shade50 : color;
+    Color _getFillColor(){
+      return widget.hasError ? _otpFieldStyle.errorBackgroundColor : _otpFieldStyle.backgroundColor;
     }
 
     return Container(
@@ -196,7 +196,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
         decoration: InputDecoration(
           isDense: widget.isDense,
           filled: true,
-          fillColor: _getFillColor(_otpFieldStyle.backgroundColor),
+          fillColor: _getFillColor(),
           counterText: "",
           contentPadding: widget.contentPadding,
           border: _getBorder(_otpFieldStyle.borderColor),
