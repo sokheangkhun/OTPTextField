@@ -174,6 +174,10 @@ class _OTPTextFieldState extends State<OTPTextField> {
           : UnderlineInputBorder(borderSide: BorderSide(color: colorOrError));
     }
 
+    Color _getFillColor(Color color){
+      return widget.hasError ? _otpFieldStyle.backgroundColor : color;
+    }
+
     return Container(
       width: widget.fieldWidth,
       margin: EdgeInsets.only(
@@ -192,7 +196,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
         decoration: InputDecoration(
           isDense: widget.isDense,
           filled: true,
-          fillColor: _otpFieldStyle.backgroundColor,
+          fillColor: _getFillColor(_otpFieldStyle.backgroundColor),
           counterText: "",
           contentPadding: widget.contentPadding,
           border: _getBorder(_otpFieldStyle.borderColor),
