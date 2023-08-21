@@ -175,7 +175,7 @@ class _OTPTextFieldState extends State<OTPTextField> {
     }
 
     Color _getFillColor(Color color){
-      return widget.hasError ? _otpFieldStyle.backgroundColor : color;
+      return widget.hasError ? Colors.red.shade50 : color;
     }
 
     return Container(
